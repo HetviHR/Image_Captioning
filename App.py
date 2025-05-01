@@ -41,29 +41,29 @@ if uploaded_file:
             st.success("Caption Generated!")
             st.text_area("📝 Generated Caption", value=caption, height=100)
 
-    if caption:
-        # Text-to-speech
-        if st.button("🔊 Speak Caption"):
-            with st.spinner("Generating speech..."):
-                tts = gTTS(text=caption)
-                with tempfile.NamedTemporaryFile(delete=False, suffix=".mp3") as fp:
-                    tts.save(fp.name)
-                    audio_path = fp.name
-                st.audio(audio_path, format="audio/mp3")
+#     if caption:
+#         # Text-to-speech
+#         if st.button("🔊 Speak Caption"):
+#             with st.spinner("Generating speech..."):
+#                 tts = gTTS(text=caption)
+#                 with tempfile.NamedTemporaryFile(delete=False, suffix=".mp3") as fp:
+#                     tts.save(fp.name)
+#                     audio_path = fp.name
+#                 st.audio(audio_path, format="audio/mp3")
 
-        # Download caption as text
-        if st.button("📥 Download Caption File"):
-            with tempfile.NamedTemporaryFile(delete=False, suffix=".txt", mode='w') as f:
-                f.write(caption)
-                st.download_button(
-                    label="Download Caption Text File",
-                    data=caption,
-                    file_name="caption.txt",
-                    mime="text/plain"
-                )
+#         # Download caption as text
+#         if st.button("📥 Download Caption File"):
+#             with tempfile.NamedTemporaryFile(delete=False, suffix=".txt", mode='w') as f:
+#                 f.write(caption)
+#                 st.download_button(
+#                     label="Download Caption Text File",
+#                     data=caption,
+#                     file_name="caption.txt",
+#                     mime="text/plain"
+#                 )
 
 
-# In[ ]:
+# # In[ ]:
 
 
 
