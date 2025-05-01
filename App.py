@@ -29,7 +29,7 @@ caption = ""
 
 if uploaded_file:
     image = Image.open(uploaded_file).convert("RGB")
-    st.image(image, caption="📷 Uploaded Image (Click Generate)", use_column_width=True)
+    st.image(image, caption="📷 Uploaded Image (Click Generate)", use_column_width=False)
 
     if st.button("✨ Generate Caption"):
         with st.spinner("Generating caption..."):
