@@ -17,7 +17,7 @@ def load_model():
 
 processor, model = load_model()
 
-# Initialize session state for caption
+# Initialize session state
 if "caption" not in st.session_state:
     st.session_state.caption = ""
 if "image" not in st.session_state:
@@ -25,25 +25,47 @@ if "image" not in st.session_state:
 
 # Title
 st.markdown("<h1 style='text-align: center; color: #2973B2;'>📷 Image Captioning using ML</h1>", unsafe_allow_html=True)
-st.write("Upload an image to generate a caption. You can also listen to or download the caption.")
+st.write("Upload or capture an image to generate a caption. Then listen or download it!")
 
-# Upload image
-uploaded_file = st.file_uploader("Choose an image", type=["jpg", "jpeg", "png"])
+# File uploader
+uploaded_file = st.file_uploader("📁 Upload an image", type=["jpg", "jpeg", "png"])
 
+# Camera input
+camera_image = st.camera_input("📸 Or capture a photo using your webcam")
+
+# Determine which image to use
 if uploaded_file:
     st.session_state.image = Image.open(uploaded_file).convert("RGB")
-    st.image(st.session_state.image, caption="📷 Uploaded Image", use_column_width=True)
+    st.image(st.session_state.image, caption="Uploaded Image", use_column_width=True)
 
-    # "Click image to caption" functionality (simulated)
-    if st.button("🖱️ Click to Generate Caption"):
-        with st.spinner("Generating caption..."):
-            inputs = processor(images=st.session_state.image, return_tensors="pt")
-            with torch.no_grad():
-                outputs = model.generate(**inputs)
-            st.session_state.caption = processor.decode(outputs[0], skip_special_tokens=True)
-        st.success("✅ Caption Generated!")
+elif camera_image:
+    st.session_state.image = Image.open(camera_image).convert("RGB")
+    st.image(st.session_state.image, caption="Captured Image", use_column_width=True)
 
-# Show caption if generated
+# Generate caption
+if st.session_state.image and st.button("✨ Generate Caption"):
+    with st.spinner("Generating caption..."):
+        inputs = processor(images=st.session_state.image, return_tensors="pt")
+        with torch.no_grad():
+            outputs = model.generate(**inputs)
+        st.session_state.caption = processor.decode(outputs[0], skip_special_tokens=True)
+    st.success("✅ Caption Generated!")
+
+# Show and interact with the caption
 if st.session_state.caption:
     st.text_area("📝 Generated Caption", value=st.session_state.caption, height=100)
 
+    if st.button("🔊 Speak Caption"):
+        with st.spinner("Generating audio..."):
+            tts = gTTS(text=st.session_state.caption)
+            with tempfile.NamedTemporaryFile(delete=False, suffix=".mp3") as fp:
+                tts.save(fp.name)
+                audio_path = fp.name
+            st.audio(audio_path, format="audio/mp3")
+
+    st.download_button(
+        label="📥 Download Caption Text File",
+        data=st.session_state.caption,
+        file_name="caption.txt",
+        mime="text/plain"
+    )
