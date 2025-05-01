@@ -36,7 +36,7 @@ camera_image = st.camera_input("📸 Or capture a photo using your webcam")
 # Determine which image to use
 if uploaded_file:
     st.session_state.image = Image.open(uploaded_file).convert("RGB")
-    st.image(st.session_state.image, caption="Uploaded Image", use_column_width=True)
+    st.image(st.session_state.image, caption="Uploaded Image")
 
 elif camera_image:
     st.session_state.image = Image.open(camera_image).convert("RGB")
