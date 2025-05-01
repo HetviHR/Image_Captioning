@@ -1,13 +1,3 @@
-#!/usr/bin/env python
-# coding: utf-8
-
-# In[1]:
-
-
-
-
-# In[2]:
-
 
 import streamlit as st
 from transformers import BlipProcessor, BlipForConditionalGeneration
@@ -71,12 +61,6 @@ if uploaded_file:
                     file_name="caption.txt",
                     mime="text/plain"
                 )
-
-
-# In[3]:
-
-
-jupyter nbconvert --to script your_notebook.ipynb
 
 
 # In[ ]:
